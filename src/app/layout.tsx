@@ -1,9 +1,15 @@
 import "./globals.css";
 
 import { Inter } from "next/font/google";
+import { Space_Grotesk } from "next/font/google";
 
 const inter = Inter({
   subsets: ["latin"],
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-space-grotesk",
 });
 
 import type { Metadata } from "next";
@@ -21,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={inter.className}>
+    <html lang="en" className={`${inter.className} ${spaceGrotesk.variable}`}>
       <body className="min-h-full flex">
         <SideBar />
 
