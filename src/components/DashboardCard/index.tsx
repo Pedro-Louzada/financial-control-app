@@ -6,7 +6,7 @@ interface CardProps {
   percent: string;
 }
 
-export function Card({ title, amount, percent }: CardProps) {
+export function DashboardCard({ title, amount, percent }: CardProps) {
   return (
     <button className="flex flex-1 flex-col gap-5 border-[0.2px] border-gray-200 p-3 rounded-xl cursor-pointer">
       <div className="flex gap-5 justify-between items-start">

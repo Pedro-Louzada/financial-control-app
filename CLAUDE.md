@@ -53,10 +53,12 @@ src/
   app/
     globals.css       # Tailwind import + @theme tokens + shadcn CSS variables
     layout.tsx        # Root layout: Inter + Space Grotesk fonts, SideBar, children
-    page.tsx          # Home page (placeholder)
+    page.tsx          # Dashboard page (placeholder)
   components/
+    DashboardCard/
+      index.tsx       # Card with finance details (in progress — see Known Issues)
     Header/
-      index.tsx       # Header with profile dropdown (in progress — see Known Issues)
+      index.tsx       # Header with profile dropdown
     SideBar/
       index.tsx       # Sidebar shell: logo + nav groups
       _components/
@@ -95,6 +97,7 @@ New pages go under `src/app/<route>/page.tsx`. Layouts, loading states, and erro
 - Tailwind utility classes only — no separate CSS files per component
 - Custom design tokens go in `@theme {}` inside `globals.css`
 - No inline `style` props unless Tailwind cannot express the value
+- Add **items-start** (or any **items-* ** value) to prevent the default stretch behavior in the `flex-containers`
 
 ### TypeScript
 - Strict mode is on — no `any`, no type assertions without justification
@@ -104,6 +107,5 @@ New pages go under `src/app/<route>/page.tsx`. Layouts, loading states, and erro
 
 ## Known Issues / Debt
 
-- `Header/index.tsx` — icon colors inside `DropdownMenuItem` do not turn white on focus/hover; caused by `not-data-[variant=destructive]:focus:**:text-accent-foreground` in `dropdown-menu.tsx` line 79 overriding icon color — needs to be updated to `text-white`
-- All `href` values in `NavLink` calls are empty strings (`""`) — routes not wired yet
-- `Header` is not yet mounted in `layout.tsx` — needs to be added to the main content area
+- Some `href` values in `NavLink` calls are empty strings (`""`) — routes not wired yet
+- `DashboardCard` props for colors, title, amount, and icons are not yet total dynamic
