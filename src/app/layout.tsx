@@ -20,6 +20,7 @@ export const metadata: Metadata = {
 };
 
 import SideBar from "@/components/SideBar";
+import { Header } from "@/components/Header";
 
 export default function RootLayout({
   children,
@@ -28,10 +29,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.className} ${spaceGrotesk.variable}`}>
-      <body className="min-h-full flex">
+      <body className="w-full h-screen flex">
         <SideBar />
 
-        {children}
+        <div className="w-full flex flex-1 flex-col bg-gray-50">
+          <Header />
+
+          {children}
+        </div>
       </body>
     </html>
   );

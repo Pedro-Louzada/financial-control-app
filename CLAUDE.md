@@ -38,9 +38,10 @@ No test framework is configured yet.
 - **TypeScript** — strict mode, path alias `@/*` → `src/*`
 - **Tailwind CSS v4** — imported via `@import "tailwindcss"` in `globals.css`; custom tokens defined with `@theme {}` (no `tailwind.config.js`)
 - **React Compiler** — enabled via `babel-plugin-react-compiler`; do NOT use `useMemo`/`useCallback` manually
-- **Inter** — loaded via `next/font/google` in root layout, applied on `<body>`
-- **Space Grotesk** — used for nav links via `--font-family-nav-link` CSS custom property in `@theme`
+- **Inter** — loaded via `next/font/google` in root layout, applied via `.className` on `<html>`
+- **Space Grotesk** — loaded via `next/font/google` with `variable: "--font-space-grotesk"`; exposed on `<html>` via `.variable`; consumed in `globals.css` as `--font-family-nav-link: var(--font-space-grotesk)`
 - **lucide-react** — icon library
+- **shadcn/ui** — component library (Luma preset, Radix UI primitives); components live in `src/components/ui/`
 - **pnpm** — package manager
 
 ---
@@ -50,16 +51,23 @@ No test framework is configured yet.
 ```
 src/
   app/
-    globals.css       # Tailwind import + @theme token definitions
-    layout.tsx        # Root layout: font setup, SideBar, children
+    globals.css       # Tailwind import + @theme tokens + shadcn CSS variables
+    layout.tsx        # Root layout: Inter + Space Grotesk fonts, SideBar, children
     page.tsx          # Home page (placeholder)
   components/
-    Header/           # Empty — to be built
+    Header/
+      index.tsx       # Header with profile dropdown (in progress — see Known Issues)
     SideBar/
       index.tsx       # Sidebar shell: logo + nav groups
       _components/
         NavLink/
           index.tsx   # Active-aware nav link (usePathname)
+    ui/               # shadcn/ui generated components (do not rename/move)
+      avatar.tsx
+      button.tsx
+      dropdown-menu.tsx
+  lib/
+    utils.ts          # cn() helper (Tailwind class merging)
 ```
 
 ---
@@ -96,7 +104,6 @@ New pages go under `src/app/<route>/page.tsx`. Layouts, loading states, and erro
 
 ## Known Issues / Debt
 
-- `layout.tsx` imports `Inter` from `next/font/google` but the font is applied via `className` on `<html>` — it should be on `<body>` or a wrapper, since `SideBar` and `children` are siblings inside `<body>`
-- `globals.css` references `"Space Grotesk"` as a font family but it is never loaded via `next/font` — it only works because the browser may fall back to `sans-serif`
-- `Header/` component directory exists but is empty
+- `Header/index.tsx` — icon colors inside `DropdownMenuItem` do not turn white on focus/hover; caused by `not-data-[variant=destructive]:focus:**:text-accent-foreground` in `dropdown-menu.tsx` line 79 overriding icon color — needs to be updated to `text-white`
 - All `href` values in `NavLink` calls are empty strings (`""`) — routes not wired yet
+- `Header` is not yet mounted in `layout.tsx` — needs to be added to the main content area

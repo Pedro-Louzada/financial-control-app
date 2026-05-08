@@ -14,8 +14,8 @@ import Link from "next/link";
 
 export default function SideBar() {
   return (
-    <div className="w-3xs h-screen flex flex-col border-r-[0.2px] border-r-[#f6f6f6]">
-      <div className="px-2.5 ml-3 mr-3 py-5 border-b-[0.2px] border-b-[#f6f6f6]">
+    <div className="w-3xs flex flex-col gap-5 px-4 pb-4 border-r-[0.2px] border-r-gray-200">
+      <div className="h-16 flex border-b-[0.2px] border-b-gray-200">
         <Link className="flex gap-2.5 items-center" href={""}>
           <div className="border rounded-full p-1 border-gray-100 shadow-md">
             <CirclePoundSterling
@@ -30,15 +30,16 @@ export default function SideBar() {
         </Link>
       </div>
 
-      <div className="flex flex-col p-3 flex-1">
-        <div className="flex-1">
-          <NavLink child="Dashboard" href="" icon={LayoutDashboard} />
+      <div className="flex flex-col flex-1">
+        <div className="flex flex-col flex-1 gap-3">
+          <NavLink child="Dashboard" href="/" icon={LayoutDashboard} />
 
           <NavLink child="Transactions" href="" icon={BanknoteArrowUp} />
 
           <NavLink child="Payroll" href="" icon={WalletCards} />
         </div>
-        <div className="flex flex-col">
+
+        <div className="flex flex-col gap-3">
           <NavLink child="Settings" href="" icon={Settings} />
 
           <NavLink child="Logout" href="" icon={Power} />

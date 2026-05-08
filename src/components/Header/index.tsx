@@ -20,8 +20,8 @@ import { Avatar, AvatarBadge, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 export function Header() {
   return (
-    <div className="flex px-5 py-5 border-b-[0.2px] border-b-[#f6f6f6] items-center justify-end">
-      <div className="flex gap-1.5">
+    <div className="h-16 flex px-5 py-4 border-b-[0.2px] border-b-gray-200 items-center">
+      <div className="flex flex-1 gap-1.5 justify-end">
         <div className="flex flex-col gap-0.5">
           <h4 className="text-gray-800 font-medium text-end text-s">
             Pedro Louzada
@@ -34,7 +34,7 @@ export function Header() {
           <DropdownMenuTrigger asChild>
             <Avatar>
               <AvatarImage
-                src="https://github.com/shadcn.png"
+                src={"../../../public/profile.jpeg"}
                 alt="@shadcn"
                 className="grayscale"
               />
