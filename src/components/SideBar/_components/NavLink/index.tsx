@@ -18,7 +18,7 @@ export function NavLink({ child, href, icon: Icon }: NavLinkProps) {
 
   return (
     <div
-      className={`px-2.5 py-3.5 rounded-xl ${
+      className={`px-2.5 py-3.5 rounded-xl transition duration-300 ease-in-out ${
         isActive ? "bg-green-300" : "hover:bg-green-300"
       } group`}
     >

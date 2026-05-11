@@ -108,4 +108,38 @@ New pages go under `src/app/<route>/page.tsx`. Layouts, loading states, and erro
 ## Known Issues / Debt
 
 - Some `href` values in `NavLink` calls are empty strings (`""`) — routes not wired yet
-- `DashboardCard` props for colors, title, amount, and icons are not yet total dynamic
+
+---
+
+## DashboardCard — In Progress
+
+### Decisions made
+- `title`, `amount`, `percent` are already props
+- **Card icon** (top-right, e.g. HandHeart): passed from the page as `React.ReactNode`, pre-colored including the wrapper `<div>` — the page owns this decision because it knows the card's semantic meaning
+- **Percent-derived display** (arrow direction, color, `+`/`-` prefix, trend container bg): derived **inside** `DashboardCard` from the `percent` value — it is a display rule, not a business rule
+- `percent` should be typed as `number`, not `string`, to enable comparisons
+
+### Next step
+Update the `CardProps` interface in `src/components/DashboardCard/index.tsx`:
+- Add `icon: React.ReactNode`
+- Change `percent: string` → `percent: number`
+- Then implement the internal logic: derive arrow, colors, and prefix from `percent` outside the `return`, and replace all hardcoded trend markup with those variables
+
+---
+
+## Learnings
+
+### Tailwind transitions
+`transition`, `duration-*`, and `ease-*` never take a `hover:` prefix — they define *how* any change animates and must always be active so the animation plays both on enter and exit. Only the property being changed gets the `hover:` prefix (e.g. `hover:bg-white hover:shadow-md`).
+
+### Tailwind dynamic classes
+Never build Tailwind class names dynamically at runtime (e.g. `` `text-${color}-400` `` or `.replace()`). Tailwind scans source files at build time and only generates CSS for complete, unbroken class strings it finds literally in the code. Always write full class names (e.g. `"text-red-400"`) so they are visible to the scanner.
+
+### switch vs if/else for comparisons
+`switch` is designed for equality checks against a single value. For range or comparison logic (e.g. `< 0`, `=== 0`, `> 0`), use `if/else if/else` — it is more readable and semantically correct.
+
+### Tailwind group and child transitions
+`transition` on a parent does not animate children's color changes — each element animates itself. When using the `group` / `group-hover:` pattern, add `transition duration-* ease-*` to the children that change color too, otherwise their color snaps while the parent animates smoothly.
+
+### Component props: data vs markup
+Prefer passing data props over `React.ReactNode` when the component has opinions about how to render its content (layout, colors, spacing). Pass `React.ReactNode` only when the component is a pure layout shell with no rendering opinions. Passing data keeps presentational logic encapsulated inside the component — if the visual treatment changes, you update one place.
