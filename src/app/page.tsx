@@ -1,10 +1,7 @@
-"use client";
-
-import { CartesianGrid, Legend, Line, LineChart, XAxis, YAxis } from "recharts";
-import { RechartsDevtools } from "@recharts/devtools";
-
 import { DashboardCard } from "@/components/DashboardCard";
+
 import { Flame, HandHeart, ShieldPlus, WalletCards } from "lucide-react";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,52 +11,9 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
 
-const data = [
-  {
-    name: "Sun",
-    uv: 400,
-    pv: 2400,
-    amt: 2400,
-  },
-  {
-    name: "Mon",
-    uv: 300,
-    pv: 4567,
-    amt: 2400,
-  },
-  {
-    name: "Tue",
-    uv: 320,
-    pv: 1398,
-    amt: 2400,
-  },
-  {
-    name: "Wed",
-    uv: 200,
-    pv: 9800,
-    amt: 2400,
-  },
-  {
-    name: "Thu",
-    uv: 278,
-    pv: 3908,
-    amt: 2400,
-  },
-  {
-    name: "Fri",
-    uv: 189,
-    pv: 4800,
-    amt: 2400,
-  },
-  {
-    name: "Sat",
-    uv: 189,
-    pv: 4800,
-    amt: 2400,
-  },
-];
+import { Button } from "@/components/ui/button";
+import { DashboardChart } from "@/components/DashboardChart";
 
 export default function Dashboard() {
   return (
@@ -114,7 +68,7 @@ export default function Dashboard() {
           }}
         />
       </div>
-      <div className="flex flex-col bg-gray-50 border rounded-xl p-6 gap-6">
+      <div className="flex flex-col bg-gray-50 border rounded-xl p-6 gap-6 max-w-5xl">
         <div className="flex justify-between items-center">
           <h3 className="font-medium text-2xl font-family-nav-link text-gray-800">
             Sales Earnings Timeline
@@ -139,18 +93,7 @@ export default function Dashboard() {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        <LineChart
-          style={{ width: "100%", aspectRatio: 1.618, maxWidth: 600 }}
-          responsive
-          data={data}
-        >
-          <CartesianGrid />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Line type="monotone" dataKey="uv" stroke="blue" />
-          <Legend />
-          <RechartsDevtools />
-        </LineChart>
+        <DashboardChart />
       </div>
     </div>
   );

@@ -55,6 +55,8 @@ src/
     layout.tsx        # Root layout: Inter + Space Grotesk fonts, SideBar, children
     page.tsx          # Dashboard page (placeholder)
   components/
+    DashboardChart/
+      index.tsx       # Area chart with weekly data (in progress — see Dashboard Chart section)
     DashboardCard/
       index.tsx       # Card with finance details (in progress — see Known Issues)
     Header/
@@ -111,6 +113,26 @@ New pages go under `src/app/<route>/page.tsx`. Layouts, loading states, and erro
 
 ---
 
+## Dashboard Chart — In Progress
+
+### Decisions made
+- `recharts` is the charting library (`^3.8.1`)
+- `recharts-dev-tools` is installed as a **devDependency** — it is a visual debugger overlay for chart internals (scales, dimensions, active data); has no value in production
+- The chart component must be a **Client Component** — Recharts internally uses hooks and browser APIs (`ResizeObserver`, mouse events), which cannot run in a Server Component
+- Component lives at `src/components/DashboardChart/index.tsx` using `AreaChart` + `Area` (not `LineChart`)
+- Uses `<ResponsiveContainer>`, `<AreaChart>`, `<XAxis>`, `<YAxis>`, `<CartesianGrid>`, `<Tooltip>`, `<Area>`, and `<RechartsDevtools />`
+
+### Known issue — `verticalCoordinatesGenerator` formula is wrong
+The custom `verticalCoordinatesGenerator` passed to `<CartesianGrid>` has two bugs:
+1. **Direction reversed** — formula subtracts from `props.width`, producing positions that decrease as index increases (right-to-left instead of left-to-right)
+2. **Misalignment with XAxis ticks** — divides by `data.length` but does not account for tick center offset, so grid lines do not align with the categorical axis ticks
+
+### Next step
+- Fix the `verticalCoordinatesGenerator`: start from `props.offset.left`, add the step per index, and account for band center offset to align with XAxis ticks
+- Remove `<RechartsDevtools />` before shipping
+
+---
+
 ## DashboardCard — In Progress
 
 ### Decisions made
@@ -143,3 +165,12 @@ Never build Tailwind class names dynamically at runtime (e.g. `` `text-${color}-
 
 ### Component props: data vs markup
 Prefer passing data props over `React.ReactNode` when the component has opinions about how to render its content (layout, colors, spacing). Pass `React.ReactNode` only when the component is a pure layout shell with no rendering opinions. Passing data keeps presentational logic encapsulated inside the component — if the visual treatment changes, you update one place.
+
+### pnpm dev dependency flag
+Use `-D` (uppercase) to install a dev dependency: `pnpm add <package> -D`. Lowercase `-d` is not a valid pnpm flag.
+
+### Recharts requires "use client"
+Any component that renders Recharts components must be marked `"use client"`. Recharts internally uses hooks and browser APIs — these cannot run in Server Components. To minimize the client boundary, isolate the chart into its own component instead of marking the whole page as a client component.
+
+### Evaluating third-party packages
+Last commit date alone is not enough to trust a package. Also check: npm weekly downloads (real adoption signal), peer dependency compatibility with your installed versions, bundle size, and open issues. A recent commit with zero downloads and mismatched peer deps is a red flag.
